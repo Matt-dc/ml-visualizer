@@ -1,70 +1,90 @@
-function drawGrid() {
+const out = document.getElementById('out')
 
-    // var body = document.getElementsByTagName('body')[0];
-    var table = document.getElementsByTagName('table')[0];
+var canvas = document.getElementById("canvas");
+var canvasLeft = canvas.offsetLeft;
+var canvasTop = canvas.offsetTop;
+var ctx = canvas.getContext("2d");
+var dataPoints = []
+var residuals = []
+var error;
 
-    var tableBody = document.createElement('tbody');
+canvas.addEventListener('click', function(event) {
+    var x = event.pageX - canvasLeft;
+    var y = event.pageY - canvasTop;
 
-    for(var i=0; i<10; i++) {
-        var tr = document.createElement('tr');
-        for (var j = 0; j < 35; j++) {
-            if(i == 9 || j == 34) {
-                break
-            } else {
-                var td = document.createElement('td');
+    ctx.fillStyle = 'red';
+    ctx.fillRect(x, y, 5, 5)
 
-                // i == 1 && j == 1 ? td.setAttribute('rowSpan', '1') : null;
-                tr.appendChild(td)
-            }
-        }
-        tableBody.appendChild(tr)
-        table.appendChild(tableBody)
-    }
+    dataPoints.push({
+        xPos: x,
+        yPos: y,
+    })
+    return out.innerHTML = dataPoints.map(el => el.xPos+' - '+el.yPos)
+})
+
+
+function drawLine() {
+
+    ctx.beginPath();
+    ctx.moveTo(900, 0);
+    ctx.lineTo(0, 400);
+    ctx.stroke()
 }
-drawGrid()
 
 
-let grid = document.getElementById("grid-container");
-let rows = grid.getElementsByTagName("tr");
-var cells;
+function generateData() {
 
-for ( var i = 0; i < rows.length; i++) {
-     cells = rows[i].getElementsByTagName("td");
+    for (let n = 0; n < 20; n++) {
+        var x = Math.floor(Math.random() * 900) 
+        var y = Math.floor(Math.random() * 400)
 
-        for (var j = 0; j < cells.length; j++) {
-            cells[j].onclick = changeColor
-        } 
+        ctx.fillStyle = '#00'+x;
+        ctx.fillRect(x, y, 5, 5)
+
+        dataPoints.push({
+            xPos: x,
+            yPos: y
+        })   
+    }
+    // return out.innerHTML = dataPoints.map(el => el.xPos + ' - ' + el.yPos)
+}
+
+
+function getResiduals() {
+
+    dataPoints.forEach(point => {
+
+        var m = -1 * 4/9
+        var intersect = (m * point.xPos) + 400
+
+        ctx.beginPath();
+        // ctx.setLineDash([5, 10]);
+        ctx.moveTo(point.xPos , point.yPos);
+        ctx.lineTo(point.xPos, intersect);
+        ctx.stroke()
+
+        residuals.push(intersect - point.yPos)
         
-    }
+    })
+    totalResiduals = residuals.reduce((a, b) => a + b*b, 0) 
+    var sqrdError = Math.sqrt(totalResiduals)
+
+    return out.innerHTML = sqrdError.toFixed(2)
 
 
-function changeColor(e) {
-
-    if (e.target.style.backgroundColor === "#000") {
-            e.target.style.backgroundColor = ""
-    } else {
-            e.target.style.backgroundColor = "#000"
-    }     
- }
-
-
- function resetGrid() {
-    for ( var i = 0; i < rows.length; i++) {
-        cells = rows[i].getElementsByTagName("td");
-   
-           for (var j = 0; j < cells.length; j++) {
-               cells[j].style.backgroundColor = "";
-           } 
-           
-       }
 }
 
+// var xStart = dataPoints[0].xPos
+// var yStart = dataPoints[0].yPos
+// var xEnd = dataPoints[1].xPos
+// var yEnd = dataPoints[1].yPos
 
 
-function generateArray() {
 
-        for(let data = [], i = 0; i < 50; i++) {
-            alert("hi");
-        }
-    }
+
+
+
+
+
+
 

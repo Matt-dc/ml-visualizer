@@ -13,20 +13,28 @@
     <nav class="nav">
         <ol>
             <li class="nav-item">
-                <button class="btn" onclick="generateArray()">Generate data</button>
+                <button class="btn" onclick="generateData()">Generate data</button>
             </li>
             <li class="nav-item">
                 <button class="btn" onclick="resetGrid()">Reset Grid</button>                
             </li>
             <li class="nav-item">
-                something
+                <button class="btn" onclick="getResiduals()">Get vertial distance</button>                
+            </li>
+            <li class="nav-item">
+                    <button class="btn" onclick="drawLine()">Draw line</button>                
             </li>
         </ol>
     </nav>
 
+    <div id="instructions">Hold the mouse button and drag over cells to select or use the generate data button</div>
+    <!-- <table id='grid-container'></table> -->
 
-    <table id='grid-container'></table>
+    <div id="grid">
+        <canvas id="canvas" width="900" height="400"></canvas>
+    </div>
 
+   out: <h4 id="out"></h4>
 
     <script type="text/javascript" src="index.js" ></script>
 
